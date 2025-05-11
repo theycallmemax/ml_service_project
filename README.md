@@ -100,12 +100,3 @@ ml_service_project/
 ├── .env            # Переменные окружения
 └── README.md       # Этот файл
 ```
-
-
-## Благодарности
-
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Streamlit](https://streamlit.io/)
-- [scikit-learn](https://scikit-learn.org/)
-- [XGBoost](https://xgboost.readthedocs.io/)
-- [LightGBM](https://lightgbm.readthedocs.io/)
