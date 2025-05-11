@@ -1,113 +1,78 @@
-# Bitcoin Price Prediction ML Service
+# ML-сервис
 
-This microservice system predicts Bitcoin (BTC/USDT) closing prices using machine learning models that automatically retrain daily. It provides FastAPI endpoints for predictions and model management.
+## Обзор
 
-## Features
+ML-сервис является компонентом машинного обучения проекта, отвечающим за обучение моделей, генерацию предсказаний цен криптовалют и предоставление API для сервисов предсказания. Он использует различные алгоритмы для предсказания будущих цен на основе исторических данных.
 
-- 🤖 **Multiple ML Models**: RandomForest, XGBoost, LightGBM, and Prophet models for BTC price prediction
-- 🔄 **Daily Retraining**: Automatically fetches new data and retrains models daily
-- 🔥 **Hot Model Swapping**: Updates models without service restart
-- 🔌 **REST API**: Simple interface for predictions and model management
-- 📊 **Model Versioning**: Maintains model history with timestamps
-- 🐳 **Docker-based**: Fully containerized setup with Docker Compose
+## Функции
 
-## Architecture
+- **Множественные модели предсказания**: Поддержка Random Forest, XGBoost и LightGBM
+- **Автоматическое переобучение**: Ежедневное переобучение моделей с новыми данными
+- **Поддержка криптовалют**: Предсказания для различных криптовалют (BTC, ETH, LTC и др.)
+- **Различные горизонты прогнозирования**: Поддержка различных периодов предсказания (1-30 дней)
+- **Интеграция исторических данных**: Загрузка и обработка исторических данных о ценах
+- **Сохранение моделей**: Сохранение и загрузка обученных моделей
 
-```
-[FastAPI ML Service] <-- Models/Data --> [Airflow DAG Service]
-       |
-       v
-Predictions & Management
-```
+## Технологический стек
 
-### Components
+- **Фреймворк**: FastAPI
+- **Библиотеки ML**: scikit-learn, XGBoost, LightGBM
+- **Обработка данных**: Pandas, NumPy
+- **Визуализация данных**: Matplotlib
+- **API-клиент**: PyBit для данных о криптовалютах
 
-- **ML Service**: FastAPI application serving models for predictions
-- **Airflow Service**: Handles scheduled daily retraining
-- **Shared Volumes**: For models and data persistence
-
-## API Endpoints
-
-- **GET /health**: Check service health status
-- **GET /model-info**: Get information about available models
-- **POST /predict**: Get BTC price prediction for the next day
-- **POST /retrain**: Manually trigger model retraining
-
-## Setup and Deployment
-
-### Prerequisites
-
-- Docker and Docker Compose installed
-- At least 4GB of RAM for running all services
-
-### Running the Service
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd ml-service
-
-# Start all services
-docker-compose up -d
-
-# Access FastAPI service
-open http://localhost:8000/docs
-
-# Access Airflow UI
-open http://localhost:8080
-```
-
-### Making a Prediction
-
-```bash
-curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d '{}'
-```
-
-Or with custom features:
-
-```bash
-curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d '
-{
-    "model_type": "xgboost",
-    "features": {
-        "open": 70000.0,
-        "high": 72000.0,
-        "low": 69000.0,
-        "close": 71000.0,
-        "volume": 100000.0,
-        "turnover": 7000000000.0
-    }
-}'
-```
-
-## Development
-
-### Project Structure
+## Структура
 
 ```
 ml_service/
-├── app/                # FastAPI application
-│   ├── main.py         # Main API endpoints
-│   └── services/       # Model handling services
-├── airflow/            # Airflow configuration
-│   └── dags/           # DAG definition for retraining
-├── models/             # Saved ML models
-├── data/               # Historical BTC data
-└── docker/             # Docker configurations
+├── app/
+│   ├── __init__.py
+│   ├── debug.py           # Утилиты отладки
+│   ├── debug_load_models.py  # Утилиты загрузки моделей
+│   └── main.py            # Основное приложение
+├── data/                  # Каталог для хранения исторических данных
+├── models/                # Каталог для хранения обученных моделей
+├── model.ipynb           # Jupyter notebook для разработки моделей
+├── poetry.lock           # Файл фиксации зависимостей Poetry
+└── pyproject.toml        # Конфигурация проекта
 ```
 
-### Adding New Models
+## API Эндпоинты
 
-To add a new model type:
+Сервис предоставляет следующие основные эндпоинты:
 
-1. Implement the training function in the Airflow DAG
-2. Update the `ModelType` enum in the FastAPI app
-3. Add model loading logic in the `load_models()` function
+- `/predict`: Генерация предсказаний для конкретной криптовалюты
+- `/retrain`: Запуск ручного переобучения моделей
+- `/model-info`: Получение информации о доступных моделях
+- `/health`: Эндпоинт проверки работоспособности
+- `/current-price`: Получение текущих цен криптовалют
 
-## License
+## Детали моделей
 
-MIT
+Сервис поддерживает несколько типов моделей:
 
-## Contributors
+- **Random Forest**: Универсальный метод ансамблевого обучения для регрессии
+- **XGBoost**: Оптимизированная библиотека машинного обучения с градиентным бустингом
+- **LightGBM**: Фреймворк градиентного бустинга, использующий алгоритмы обучения на основе деревьев
 
-- Your Name
+## Разработка
+
+### Предварительные требования
+
+- Python 3.8+
+- Poetry
+
+### Настройка
+
+```bash
+# Установка зависимостей
+cd ml_service
+poetry install
+
+# Запуск приложения
+poetry run uvicorn app.main:app --reload
+```
+
+## Docker
+
+Сервис контейнеризирован и может быть запущен с использованием Docker и docker-compose. См. README корневого проекта для инструкций.

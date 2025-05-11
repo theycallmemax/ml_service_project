@@ -17,24 +17,22 @@ import matplotlib.pyplot as plt
 import io
 import base64
 
-# For model training
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 import xgboost as xgb
 import lightgbm as lgb
 
-# For data fetching
 from pybit.unified_trading import HTTP
 
-# Configure logging
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger("ml-service")
 
-# Initialize FastAPI app
+
 app = FastAPI(
     title="Cryptocurrency Price Prediction ML Service",
     description="API for cryptocurrency price predictions using ML models with daily retraining",
@@ -670,14 +668,12 @@ async def health_check():
         models_loaded=model_count
     )
 
-# Current price endpoint
 @app.get("/current-price/{crypto}")
 async def get_current_price(crypto: CryptoType):
     try:
         symbol = f"{crypto}usdt"
         session = HTTP(testnet=False)
         
-        # Get ticker data
         ticker_data = session.get_tickers(category="linear", symbol=symbol.upper())
         
         if ticker_data["retCode"] != 0:

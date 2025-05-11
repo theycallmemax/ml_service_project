@@ -6,7 +6,6 @@ import pickle
 from datetime import datetime
 from enum import Enum
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
