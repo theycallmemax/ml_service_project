@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Виртуальные окружения
+venv/
+ENV/
+
+# Игнорировать содержимое папок, но не сами папки
+ml_service/data/*
+ml_service/models/*
+
+# Не игнорировать файлы .gitkeep, которые сохраняют структуру папок
+!ml_service/data/.gitkeep
+!ml_service/models/.gitkeep
+
+# Логи и временные файлы
+*.log
+*.bak*
+temp_*.py
+fix.txt
+
+# Конфиги с секретами
+.env
